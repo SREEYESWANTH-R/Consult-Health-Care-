@@ -16,7 +16,7 @@ const app = express();
 app.use(cookieParser());
 app.use(cors({
   origin:["http://localhost:3001"],
-  methods:['POST','GET','UPDATE','DELETE'],
+  methods:['POST','GET','UPDATE','DELETE','PUT'],
   credentials:true
 }));
 
@@ -170,14 +170,21 @@ app.get(`/profile/:id`,(req,res)=>{
 });
 
 //Route for updating profile of user 
-app.put(`/uptuser/:id`,(req,res)=>{
-  const id = req.params.id;
-  const uptProfile = "UPADTE signup SET `name`= ? AND `email` = ? WHERE id = ?";
-  db.query(uptProfile,[id],(err,uptRes)=>{
-    if(err) return res.status(500).json({success:false,message:'Error updating profile'});
-    return res.status(200).json({success:true,message:'profile updated',uptRes});
-  })
-})
+app.post(`/uptprofile/:id`,(req,res)=>{
+  const {Mobile,Address} = req.body;
+  const User_id = req.params.id;
+  const updateProfile = `
+  INSERT INTO profile (user_id, mobile, address)
+  VALUES (?, ?, ?)
+  ON DUPLICATE KEY UPDATE mobile = VALUES(mobile), address = VALUES(address)
+`;
+
+  db.query(updateProfile,[User_id,Mobile,Address],(err,uptRes)=>{
+    if(err) return res.status(500).json("Error Updating Profile");
+    return res.status(200).json({success:false, message:"Successful" , uptRes})
+  });
+});
+
 
 //Route for Booking appoinment
 app.post('/appoinment',(req,res)=>{
@@ -225,8 +232,6 @@ app.post('/appoinment',(req,res)=>{
 
 
 //Route to send mail to admin regarding the appoinmaent
-
-
 app.post('/notify-admin',(req,res)=>{
   const{name,age,mobile,address,chooseDoc,date} = req.body;
   const transporter = nodeMailer.createTransport({

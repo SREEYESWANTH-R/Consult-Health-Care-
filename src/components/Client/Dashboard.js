@@ -1,7 +1,7 @@
 import React ,{useState,useEffect} from 'react'
 import './Dashboard.css'
 import { Link,useNavigate} from 'react-router-dom';
-import {LocalHospital,AccountCircle,SearchRounded} from '@mui/icons-material'
+import {LocalHospital,AccountCircle} from '@mui/icons-material'
 import {Button} from '@mui/material';
 import axios from "axios";
 import docIcon from '../../assests/doctor_1021566 (2).png'
@@ -82,9 +82,9 @@ function Dashboard(){
 
       <div className='dash-main-cont'>
         <div class="dash-main-info">
-            <div class="dash-ip">
+            {/* <div class="dash-ip">
               <SearchRounded/><input type="text" placeholder='Enter name of Doctor' class='dash-search'></input>
-            </div>
+            </div> */}
             <div className='services'>
               <h4>SERVICES FOR YOU</h4>
               <hr></hr>
