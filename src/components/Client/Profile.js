@@ -1,6 +1,6 @@
 import React,{useEffect,useState} from 'react';
-import { Link,useNavigate, useParams} from 'react-router-dom';
-import { Button, TextField } from '@mui/material';
+import { useParams} from 'react-router-dom';
+import { Button } from '@mui/material';
 import {LocalHospital} from '@mui/icons-material'; 
 import axios from 'axios'
 import './Profile.css'
