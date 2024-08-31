@@ -8,6 +8,7 @@ const jwt = require('jsonwebtoken');
 const nodeMailer = require('nodemailer');
 const dotenv = require('dotenv');
 const cookieParser = require("cookie-parser");
+const axios = require('axios');
 
 dotenv.config()
 
@@ -43,18 +44,34 @@ app.use('/images', express.static(path.join(__dirname, 'images')));
 
 
 //Cookie auth path 
-const verifyToken = (req,res,next)=>{
+const verifyToken = async (req,res,next)=>{
   //req token from cookies of the user
   const token = req.cookies.accessToken;
   //check if token is provided
   if(!token) return res.status(401).json({success:'false',message:'Session ended, login again'});
   //verify the token to get the user id
-  jwt.verify(token,process.env.MY_PRIVATE_KEY,(err,decoded)=>{
-    if(err) return res.status(401).json({success:false,message:'Session Ended Login Again'});
+  try {
+    // Verify the token to get the user id
+    const decoded = jwt.verify(token, process.env.MY_PRIVATE_KEY);
     req.userId = decoded.Id;
-    next();  // Pass control to the next middleware
-  });
-}
+    next(); // Pass control to the next middleware
+  } catch (err) {
+    // If the token is expired or invalid, update the user's active state to 0 (inactive)
+    const userId = jwt.decode(token)?.Id; // Decode the token to get the user id
+    if (userId) {
+      const updateQuery = "UPDATE signup SET active = 0 WHERE id = ?";
+      db.query(updateQuery, [userId], (error) => {
+        if (error) {
+          console.error('Error updating user active status:', error);
+        }
+      });
+    }
+    // Clear the token cookie and redirect the user to the login page
+    res.clearCookie('accessToken');
+    return res.status(401).json({ success: false, message: 'Session ended, login again' });
+  }
+};
+
 
 //database connection 
 const db = mysql.createConnection(
@@ -170,7 +187,7 @@ app.get(`/profile/:id`,(req,res)=>{
 });
 
 //Route for updating profile of user 
-app.post(`/uptprofile/:id`,(req,res)=>{
+app.put(`/uptprofile/:id`,(req,res)=>{
   const {Mobile,Address} = req.body;
   const User_id = req.params.id;
   const updateProfile = `
@@ -262,7 +279,7 @@ app.post('/notify-admin',(req,res)=>{
     return res.status(200).json({success:true,message:"Admin Notified"});
   })
 
-})
+});
 
 //Route to delete appoinment - admin 
 app.post('/admin/appointment/delete', (req, res) => {
@@ -353,6 +370,17 @@ app.get(`/dashboard/docdetails/:id`,(req,res)=>{
     res.status(200).json({success:true,message:'Data fetched successfully', result});
   });
 });
+
+//OpenFDA Durg Api Route
+// app.get('/api/tablets', async (req, res) => {
+//   try {
+//     // Call the OpenFDA API or your own service
+//     const response = await axios.get('https://api.openfda.gov/drug/label.json?limit=5');
+//     res.json(response.data.results);
+//   } catch (error) {
+//     res.status(500).json({ message: 'Error fetching tablets data' });
+//   }
+// });
 
 
 app.listen(Port,()=>{

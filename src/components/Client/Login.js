@@ -37,7 +37,6 @@ function Login() {
     }catch(error){
       console.error("Login Failed ! Invalid User Details",error)
     }
-    
   }
   
 

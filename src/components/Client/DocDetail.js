@@ -23,11 +23,11 @@ function DocDetail() {
   },[id]);
 
   return (
-<div className='details-container'>
+    <div className='details-container'>
       {doctor ? (
         <div className='doctors'>
           <div className='doc-img'>
-            <img src={`../../../server/images/${doctor.image}`} alt={doctor.name} />
+            <img src={`http://localhost:3000/images/${doctor.image}`} alt={doctor.name} />
           </div>
           <div className='doc-LE'>
             <h5><MedicalInformation />{doctor.expertise}</h5>
@@ -37,7 +37,11 @@ function DocDetail() {
             </h5>
             <h5><LocationOn />{doctor.location}</h5>
           </div>
+          <div>
+            <p>{doctor.name}</p>
+          </div>
           <div className='des-frame'>
+          
             {doctor.description}
           </div>
         </div>

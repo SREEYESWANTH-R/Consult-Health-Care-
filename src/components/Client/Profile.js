@@ -20,6 +20,7 @@ const Profile = () => {
       if(ProfileRes.status === 200){
         setName(ProfileRes.data.result[0].name);
         setEmail(ProfileRes.data.result[0].email);
+        setMobile(ProfileRes.data.result0[0].mobile);  
       }
     }catch(error){
       console.error("Error fetching profile",error);
@@ -33,12 +34,13 @@ const Profile = () => {
   const updateProfile = async(e) => {
     e.preventDefault();
     try{
-      const uptRes = await axios.post(`http://localhost:3000/uptprofile/${id}`,{
+      const uptRes = await axios.put(`http://localhost:3000/uptprofile/${id}`,{
         Mobile:mobile,
         Address:address
       })
       if(uptRes.status === 200){
         console.log('Profile updated successfully');
+        alert("Profile updated successfully")
       }
       setIsEditable(false); 
     }catch(error){
