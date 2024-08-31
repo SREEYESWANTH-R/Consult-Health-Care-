@@ -1,49 +1,39 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React from 'react';
+import { Card, CardContent, Typography } from '@mui/material';
 
-function Pharmacy() {
-  const [pharmacy, setPharmacy] = useState([]);
+const Pharmacy = ({ drugs }) => {
 
-  async function pharmacyAPI() {
-    const options = {
-      method: 'GET',
-      url: 'https://myhealthbox.p.rapidapi.com/search/fulltext',
-      params: {
-        q: 'aspirin',
-        c: 'us',
-        l: 'en',
-        f: 'name',
-        limit: '10',
-        from: '0'
-      },
-      headers: {
-        'x-rapidapi-key': 'a01c023c27msh24a782bd71ef2bap180807jsnfd5051aa1325',
-        'x-rapidapi-host': 'myhealthbox.p.rapidapi.com'
-      }
-    };
-
-    try {
-      const response = await axios.request(options);
-      setPharmacy(response.data); // Update the state with the response data
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  useEffect(() => {
-    pharmacyAPI(); // Call the API function when the component mounts
-  }, []);
-
-  return (
-    <div>
-      <h1>Pharmacy</h1>
-      <ul>
-        {pharmacy.map((item, index) => (
-          <li key={index}>{item.name}</li>
-        ))}
-      </ul>
-    </div>
-  );
-}
+    return (
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
+      {drugs.map((drug, index) => (
+          <Card key={index} style={{ width: '300px', margin: '10px' }}>
+              <CardContent>
+                  <Typography variant="h6" component="div">
+                      {drug.name}
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary">
+                      Brand: {drug.brand}
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary">
+                      Generic: {drug.generic}
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary">
+                      Dosage Form: {drug.dosageForm}
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary">
+                      Strength: {drug.strength}
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary">
+                      Route: {drug.route}
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary">
+                      Description: {drug.description}
+                  </Typography>
+              </CardContent>
+          </Card>
+      ))}
+  </div>
+    );
+};
 
 export default Pharmacy;

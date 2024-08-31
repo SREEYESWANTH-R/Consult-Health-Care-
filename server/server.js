@@ -262,7 +262,7 @@ app.post('/notify-admin',(req,res)=>{
 
   const emailOptions = {
     from:process.env.USER_MAIL,
-    to:process.env.ADMIN_MAIl,
+    to:process.env.ADMIN_MAIL,
     subject:'Booking Details',
     text:`NEW BOOKING DETAILS:
     \nNAME : ${name}
@@ -371,16 +371,6 @@ app.get(`/dashboard/docdetails/:id`,(req,res)=>{
   });
 });
 
-//OpenFDA Durg Api Route
-// app.get('/api/tablets', async (req, res) => {
-//   try {
-//     // Call the OpenFDA API or your own service
-//     const response = await axios.get('https://api.openfda.gov/drug/label.json?limit=5');
-//     res.json(response.data.results);
-//   } catch (error) {
-//     res.status(500).json({ message: 'Error fetching tablets data' });
-//   }
-// });
 
 
 app.listen(Port,()=>{
