@@ -1,0 +1,17 @@
+.Search-tablet{
+    text-align: center;
+    padding: 1em;
+    
+}
+
+.Search-tablet input{
+    width:50%;
+    height: 35px;
+    outline: none;
+    
+}
+
+.heading{
+    font-family: Poppins;
+    padding:0  9em;
+}

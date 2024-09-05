@@ -12,7 +12,7 @@ import DocDetail from './components/Client/DocDetail';
 import Pharmacy from './components/Client/Pharmacy';
 import AddDoc from './components/Admin/AddDoc';
 import Profile from './components/Client/Profile';
-import {drugs} from './components/Client/Drugs'
+
 
 
 function App() {
@@ -26,7 +26,7 @@ function App() {
         <Route path="/login" element={<Login/>}/>
         <Route path="/dashboard" element={<Dashboard/>}/>
         <Route path="/dashboard/appoinment" element={<Appoinment/>}/>
-        <Route path="/dashboard/pharmacy" element={<Pharmacy drugs={drugs}/>}/>
+        <Route path="/dashboard/pharmacy" element={<Pharmacy/>}/>
         <Route path="/dashboard/doctors" element={<Doctor/>}/>
         <Route path="/dashboard/DocDetails/:id" element={<DocDetail/>}/>
         <Route path="/profile/:id" element={<Profile/>}/>

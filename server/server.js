@@ -8,7 +8,7 @@ const jwt = require('jsonwebtoken');
 const nodeMailer = require('nodemailer');
 const dotenv = require('dotenv');
 const cookieParser = require("cookie-parser");
-const axios = require('axios');
+
 
 dotenv.config()
 
@@ -349,7 +349,7 @@ app.post('/addDoctor', upload.single('image'), (req, res) => {
   });
 });
 
-
+//Route to Display Doctors
 app.get('/dashboard/doctors',(req,res)=>{
   const query = 'SELECT * FROM doctor'
   db.query(query,(error, result)=>{
@@ -362,6 +362,7 @@ app.get('/dashboard/doctors',(req,res)=>{
   })
 });
 
+//Route to display Doctor details
 app.get(`/dashboard/docdetails/:id`,(req,res)=>{
   const {id} = req.params;
   const detailSql = 'SELECT * FROM doctor WHERE id = ?';
@@ -371,6 +372,47 @@ app.get(`/dashboard/docdetails/:id`,(req,res)=>{
   });
 });
 
+//Route to get Drugs from the table
+app.get('/api/drugs',(req,res)=>{
+  db.query("SELECT * FROM Drugs",(err,result)=>{
+    if(err) {res.status(400).json("Error Fetching Drug Details");}
+    else{
+      res.status(200).json(result);
+    }
+  })
+})
+
+app.put("/add/cart",verifyToken,async(req,res)=>{
+  const{drug_id,cost,quantity} = req.body;
+  const userId = req.userId
+  // const sql = "INSERT INTO Cart ( drug_id, quantity, cost, userId) VALUES (?, ?, ?, ?)";
+  // 
+  try{
+   const [rows] = await db.promise().query(
+    "SELECT cost, quantity FROM Cart WHERE drug_id = ? AND userId = ?",
+    [drug_id,userId]
+   )
+   if(rows.length > 0){
+     const currQuantity = rows[0].quantity
+     const curCost = parseFloat(rows[0].cost)
+
+     const newQuantity = currQuantity + quantity;
+     const newCost = curCost + parseFloat(cost);
+
+     await db.promise().query("UPDATE Cart SET quantity = ?, cost = ? WHERE drug_id = ? AND userId = ?",
+      [newQuantity,newCost,drug_id,userId]
+     );
+   }else{
+    const sql = "INSERT INTO Cart ( drug_id, quantity, cost, userId) VALUES (?, ?, ?, ?)"
+    const values = [ drug_id,quantity,cost,userId];
+    await db.promise().query(sql,values);
+   }
+   res.status(200).send({ message: 'Drug added to cart successfully' });
+  }catch(error){
+    console.error('Error adding drug to cart:', error);
+    res.status(500).send({ message: 'Failed to add drug to cart' });
+  }
+});
 
 
 app.listen(Port,()=>{
