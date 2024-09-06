@@ -10,11 +10,13 @@
 
 .profile-items {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     justify-content: space-between;
     align-items: center;
     width: 100%;
     padding: 1em 2em;
+    background-color: aliceblue;
+    border-radius: 15px;
     gap: 1em; /* Add some space between the rows */
 }
 
@@ -36,3 +38,11 @@
     font-family: Poppins;
     all: unset;
 }
+
+.p-image{
+ border: 1px solid black;
+ width:70px;
+ height: 70px;
+ border-radius: 50%;
+}
+

@@ -1,14 +1,16 @@
 import React,{useEffect, useState} from 'react';
 import { Link} from 'react-router-dom';
-import { Card, CardContent, Typography ,Button} from '@mui/material';
+import { Card, CardContent, Typography ,Button, Modal } from '@mui/material';
 import {LocalHospital,AccountCircle, ShoppingCartCheckoutOutlined} from '@mui/icons-material'
 import './Pharmacy.css'
-import { CardActions } from '@mui/joy';
+import { ModalDialog, ModalClose,CardActions} from '@mui/joy';
 import axios from 'axios';
 
 const Pharmacy = () => {
     const [drugName, setDrugName] = useState("");
     const [drugs,setDrugs] = useState([]);
+    const [openModal, setOpenModal] = useState(false);
+    const [cart,setCart] = useState([]);
     
     const fetchDrugs = async() =>{
         try{
@@ -45,6 +47,27 @@ const Pharmacy = () => {
         }
     }
 
+    const handleModalOpen = () => {
+        setOpenModal(true);
+        fetchCart()
+    };
+
+    const handleModalClose = () => {
+        setOpenModal(false);
+    };
+
+    const fetchCart = async()=>{
+        try{
+            const getCart = await axios.get("http://localhost:3000/cart-details");
+            if(getCart){
+                console.log(getCart)
+                setCart(getCart.data.cartRes);
+            }
+        }catch(error){
+            console.log("Error fetching details",error);
+        }
+    }
+
     useEffect(()=>{
         fetchDrugs();
     },[])
@@ -53,16 +76,19 @@ const Pharmacy = () => {
         <div>
              <header className='dash-head' style={{fontFamily:'Poppins'}}>
                 <div className='dash-logo'>
-                <LocalHospital fontSize='large' style={{ color: 'blue'}} />
+                <Link to='/dashboard'><LocalHospital fontSize='large' style={{ color: 'blue'}} /></Link>
                 <Link to='/dashboard' style={{color:'black', textDecoration:'none'}}><h3>Consult</h3></Link>
                 </div>
                 <div>
                 <div className='pharmacy-nav'>
                     <AccountCircle fontSize='medium'/> 
-                    <Link to='/billing' style={{textDecoration:'none', color:'black'}}><ShoppingCartCheckoutOutlined fontSize='medium'/></Link>
+                    <ShoppingCartCheckoutOutlined fontSize='medium' onClick={handleModalOpen} style={{ cursor: 'pointer' }} />
+
                 </div>
                 </div>
             </header>
+
+    
             <div className='Search-tablet'>
                 <input placeholder='Enter Tablet Name' type='text' value={drugName} onChange={e=>{setDrugName(e.target.value)}}/>
                 <Button onClick={searchDrugs}>Search</Button>
@@ -113,6 +139,37 @@ const Pharmacy = () => {
                 </Typography>
             )}
         </div>
+
+        <Modal open={openModal} onClose={handleModalClose}>
+                <ModalDialog variant="solid" color='white' sx={{width:'50%',textAlign:'center'}} >
+                    <ModalClose onClick={handleModalClose} />
+                    <Typography id="modal-title" variant="h6" component="h2" color={'black'}>
+                        Cart Details
+                    </Typography>
+                    {cart && cart.length > 0 ? (
+                        cart.map((item) => (
+                            <div key={item.precption_id} style={{display:"flex", justifyContent:"space-evenly",alignItems:"center"}}>
+                                <Typography color={'black'}>
+                                    {item.name}
+                                </Typography>
+                                <Typography color={'black'}>
+                                    x {item.quantity}
+                                </Typography>
+                                <Typography color={'black'}>
+                                    ₹{item.cost}
+                                </Typography>
+                                <hr />
+                            </div>
+                        ))
+                   ):(
+                    <Typography id="modal-description" color={'black'}>
+                        Your cart is empty.
+                    </Typography>
+                   )}
+                   <Button variant="contained" style={{ backgroundColor: 'green',width:'150px', margin:"auto "}} type='submit' >Order Now</Button>
+                </ModalDialog>
+            </Modal>
+
   </div>
     );
 };

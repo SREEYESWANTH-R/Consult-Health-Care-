@@ -179,7 +179,7 @@ app.get('/userData',verifyToken,(req, res) => {
 
 app.get(`/profile/:id`,(req,res)=>{
   const id = req.params.id;
-  const profileSql = "SELECT * FROM signup where id = ?";
+  const profileSql = ` select p.mobile,p.address,s.name,s.email from profile p join signup s on p.user_id = s.id `;
   db.query(profileSql,[id],(err,result)=>{
     if(err) return res.status(401).json({success:false,message:"Error Fetching Doctor"})
     return res.status(200).json({success:true,message:'Doctor Data Fetched successfully',result});
@@ -414,6 +414,16 @@ app.put("/add/cart",verifyToken,async(req,res)=>{
   }
 });
 
+app.get("/cart-details",(req,res)=>{
+  db.query(`
+    select c.prescription_id,c.quantity , c.cost, d.name from Cart c join Drugs d on c.drug_id = d.drug_id;`,(err,cartRes)=>{
+      if(err){
+        res.status(400).json("Error getting cart details")
+      }else{
+        res.status(200).json({success:true,message:'details Fetched successfully',cartRes})
+      }
+    })
+})
 
 app.listen(Port,()=>{
     console.log(`Server running on PORT ${Port}`)

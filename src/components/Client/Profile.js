@@ -1,5 +1,5 @@
 import React,{useEffect,useState} from 'react';
-import { useParams} from 'react-router-dom';
+import { useParams,Link} from 'react-router-dom';
 import { Button } from '@mui/material';
 import {LocalHospital} from '@mui/icons-material'; 
 import axios from 'axios'
@@ -12,15 +12,20 @@ const Profile = () => {
   const [email,setEmail] = useState('');
   const [address,setAddress] = useState('');
   const [mobile,setMobile] = useState('');
+  const [image,setImage] = useState(null);
   const [isEditable, setIsEditable] = useState(false);
 
   const fetchProfile = async() =>{
     try{
       const ProfileRes = await axios.get(`http://localhost:3000/profile/${id}`)
-      if(ProfileRes.status === 200){
+      if(ProfileRes.status === 200){ 
+        console.log(ProfileRes)
         setName(ProfileRes.data.result[0].name);
         setEmail(ProfileRes.data.result[0].email);
-        setMobile(ProfileRes.data.result0[0].mobile);  
+        setMobile(ProfileRes.data.result[0].mobile); 
+        setAddress(ProfileRes.data.result[0].address);
+        // setImage(ProfileRes.data.result[0].image); 
+
       }
     }catch(error){
       console.error("Error fetching profile",error);
@@ -56,12 +61,15 @@ const Profile = () => {
     <div className='profile-container'>
        <header className='header'>
         <div className='logo-sec'>
-            <LocalHospital fontSize='large' style={{ color: 'blue' }} />
-          <h3>Consult</h3>
+          <Link to='/dashboard'><LocalHospital fontSize='large' style={{ color: 'blue'}} /></Link>
+          <Link to='/dashboard' style={{color:'black', textDecoration:'none'}}><h3>Consult</h3></Link>
         </div>
       </header>
       <div className='profile'>
           <form className='profile-items' onSubmit={updateProfile}>
+            <div className='p-items p-image'>
+              <input className='image-int' placeholder="name" value={image} type='file' disabled={!isEditable} onChange={e => setImage(e.target.files[0])}></input> 
+            </div>
             <div className='p-items'>
               <label>Name</label>
               <input className='name-int' placeholder="name" value={name}></input> 
