@@ -12,7 +12,7 @@ const Profile = () => {
   const [email,setEmail] = useState('');
   const [address,setAddress] = useState('');
   const [mobile,setMobile] = useState('');
-  const [image,setImage] = useState(null);
+  // const [image,setImage] = useState(null);
   const [isEditable, setIsEditable] = useState(false);
 
   const fetchProfile = async() =>{
@@ -53,6 +53,7 @@ const Profile = () => {
     }
   };
 
+
   const handleEditClick = () => {
     setIsEditable(true);
   };
@@ -67,9 +68,9 @@ const Profile = () => {
       </header>
       <div className='profile'>
           <form className='profile-items' onSubmit={updateProfile}>
-            <div className='p-items p-image'>
-              <input className='image-int' placeholder="name" value={image} type='file' disabled={!isEditable} onChange={e => setImage(e.target.files[0])}></input> 
-            </div>
+            {/* <div className='p-items p-image'>
+              <input className='image-int' type='file' disabled={!isEditable} onChange={e => setImage(e.target.files[0])}></input> 
+            </div> */}
             <div className='p-items'>
               <label>Name</label>
               <input className='name-int' placeholder="name" value={name}></input> 
@@ -87,8 +88,8 @@ const Profile = () => {
             <textarea className='address-int' placeholder='address' value={address} disabled={!isEditable}  onChange={(e)=>{setAddress(e.target.value)}}></textarea>
            </div>
           <div>
-            <Button type="button" onClick={handleEditClick}>Edit</Button>
-            <Button type="submit">Save</Button>
+            <Button type="button" onClick={handleEditClick} variant='contained'>Edit</Button>
+            <Button type="submit" variant='contained' color='success'>Save</Button>
           </div>
         </form>
 

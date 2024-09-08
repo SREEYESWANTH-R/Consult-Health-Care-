@@ -31,7 +31,7 @@ const storage = multer.diskStorage({
     cb(null, "images" )
   },
   filename:(req,file,cb)=>{
-    cb(null,file.fieldname+ '_' + Date.now() +path.extname(file.originalname));
+    cb(null,file.fieldname+ '_' + Date.now() + path.extname(file.originalname));
   }
 });
 
@@ -104,6 +104,32 @@ app.post("/signup",async(req,res)=>{
     )
 });
 
+//Router to change password
+app.put('/change-password',(req,res)=>{
+  const { oldPass,newPass,email} = req.body;
+  db.query("Select password from signup Where email= ?",[email],(err,result)=>{
+    if(err) res.status(400).json({message:"Wrong Email"});
+    if(result.length > 0){
+      const user = result[0];
+      bcrypt.compare(oldPass.toString(),user.password,async(err)=>{
+        if(err){
+          res.status(400).json({success:false,message:'Wront Password'});
+        }else{
+          const newHashPAss = await bcrypt.hash(newPass,10);
+          db.query("UPDATE signup SET password = ? WHERE email = ?",[newHashPAss,email],(err)=>{
+            if(err) {
+              res.status(400).json("Incorrect Credentials");
+            }else{
+              res.status(200).json({success:true,message:'PAssword Changed successfully'});
+            }
+          })
+        }
+
+      })
+    }
+  })
+})
+
 //Route for Login
 app.post("/login", (req, res) => {
   const { Email,password} = req.body;
@@ -144,6 +170,7 @@ app.post("/login", (req, res) => {
   });
 });
 
+//Route for logout
 app.post('/logout',verifyToken,(req,res)=>{
     const userId  = req.userId; 
     //query to update the active status of user to false
@@ -177,14 +204,23 @@ app.get('/userData',verifyToken,(req, res) => {
   });
 });
 
+//Route to dialy the profile details
 app.get(`/profile/:id`,(req,res)=>{
   const id = req.params.id;
-  const profileSql = ` select p.mobile,p.address,s.name,s.email from profile p join signup s on p.user_id = s.id `;
+  const profileSql = `
+  select s.name,s.email,p.mobile,p.address 
+  from signup s left join profile p on p.user_id = s.id 
+  WHERE s.id = ?`;
+
   db.query(profileSql,[id],(err,result)=>{
-    if(err) return res.status(401).json({success:false,message:"Error Fetching Doctor"})
-    return res.status(200).json({success:true,message:'Doctor Data Fetched successfully',result});
+    if(err) return res.status(401).json({success:false,message:"Error Fetching user details"});
+    if (result.length === 0) {
+      return res.status(404).json({ success: false, message: "No User Found" });
+    }
+    return res.status(200).json({success:true,message:'User Data Fetched successfully',result});
   });
 });
+
 
 //Route for updating profile of user 
 app.put(`/uptprofile/:id`,(req,res)=>{
