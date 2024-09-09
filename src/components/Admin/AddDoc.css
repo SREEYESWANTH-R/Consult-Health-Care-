@@ -1,0 +1,12 @@
+*{
+    font-family: Poppins;
+}
+
+.AddDoc-Details{
+    padding: 1em 3em;
+    text-align: center;
+}
+
+.AddDoc-Details h1{
+    margin-bottom: 10px;
+}

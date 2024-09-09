@@ -106,17 +106,17 @@ app.post("/signup",async(req,res)=>{
 
 //Router to change password
 app.put('/change-password',(req,res)=>{
-  const { oldPass,newPass,email} = req.body;
-  db.query("Select password from signup Where email= ?",[email],(err,result)=>{
+  const { oldPass,newPass,passChangeEmail} = req.body;
+  db.query("Select password from signup Where email= ?",[passChangeEmail],(err,result)=>{
     if(err) res.status(400).json({message:"Wrong Email"});
     if(result.length > 0){
       const user = result[0];
-      bcrypt.compare(oldPass.toString(),user.password,async(err)=>{
+      bcrypt.compare(oldPass.toString(),user.password,(err)=>{
         if(err){
           res.status(400).json({success:false,message:'Wront Password'});
         }else{
-          const newHashPAss = await bcrypt.hash(newPass,10);
-          db.query("UPDATE signup SET password = ? WHERE email = ?",[newHashPAss,email],(err)=>{
+          const newHashPAss = bcrypt.hash(newPass,10);
+          db.query("UPDATE signup SET password = ? WHERE email = ?",[newHashPAss,passChangeEmail],(err)=>{
             if(err) {
               res.status(400).json("Incorrect Credentials");
             }else{
@@ -407,6 +407,15 @@ app.get(`/dashboard/docdetails/:id`,(req,res)=>{
     res.status(200).json({success:true,message:'Data fetched successfully', result});
   });
 });
+
+//Route to delete Doctor
+app.delete("/delete-doctor/:DocId",(req,res)=>{
+  const {DocId} = req.params;
+  db.query('DELETE FROM doctor WHERE id = ?',[DocId],(err)=>{
+    if(err){res.status(400).json({success:false,message:'Id Not defined'})}
+    res.status(200).json({Success:'true',message:'Doctor detail deleted successfully'})
+  })
+})
 
 //Route to get Drugs from the table
 app.get('/api/drugs',(req,res)=>{
