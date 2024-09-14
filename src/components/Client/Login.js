@@ -12,6 +12,8 @@ function Login() {
   const [error,setError] = useState("");
   const [message,setMessage] = useState("");
   const [openModal, setOpenModal] = useState(false);
+  const [oldPass,setOldPass] = useState("");
+  const [passChangeEmail, setPassChangeEmail] = useState("");
   const [newPass, setNewPass] = useState("");
 
   axios.defaults.withCredentials = true;
@@ -52,8 +54,8 @@ function Login() {
 
   const handlePassChange = ()=>{
     axios.put('http://localhost:3000/change-password',{
-      email,
-      oldPass: password,
+      passChangeEmail,
+      oldPass,
       newPass
     }).then(()=>{
       alert("password updated successfully");
@@ -118,9 +120,9 @@ function Login() {
               helperText={error}
               id="outlined-basic"
               label="Email"
-              value={email}
+              value={passChangeEmail}
               variant="outlined"
-              onChange={e => setEmail(e.target.value)}
+              onChange={e => setPassChangeEmail(e.target.value)}
               style={{marginTop:'20px'}} />
             
             <TextField
@@ -128,10 +130,10 @@ function Login() {
               helperText={error}
               id="outlined-basic"
               label="Old Password"
-              value={password}
+              value={oldPass}
               type='password'
               variant="outlined"
-              onChange={e => setPassword(e.target.value)}
+              onChange={e => setOldPass(e.target.value)}
               
             />
 

@@ -3,6 +3,7 @@ import './AddDoc.css'
 import { Button, TextField,Input,Snackbar,Alert,Typography,Card,CardContent,Modal} from '@mui/material';
 import axios from 'axios'
 import { EditNote, Delete} from '@mui/icons-material';
+import { ModalDialog, ModalClose} from '@mui/joy';
 
 
 function AddDoc(){
@@ -15,14 +16,15 @@ const [description,setDesc] = useState('')
 const [image,setImage] = useState();
 const [openSnackBar, setOpenSnackBar] = useState(false);
 const [doctor,setDoc] = useState([]);
+const [openModal, setOpenModal] = useState(false);
+const [currentDoctorId, setCurrentDoctorId] = useState(null);
 
  
 const handleClose = ()=>{
   setOpenSnackBar(false)
 }
 
-
- function docDetails(event){
+ function docDetails (event){
         event.preventDefault()
         const formData = new FormData();
         formData.append('name', name);
@@ -61,6 +63,23 @@ const fetchDoctors = () =>{
   })
 }
 
+const handleModalOpen = (doc) => {
+  setOpenModal(true);
+  setCurrentDoctorId(doc.id);
+  setLocation(doc.location);
+  setDesc(doc.description);
+  setOpenModal(true);
+  // handleEdit(Id)
+  
+};
+
+const handleModalClose = () => {
+  setLocation('');
+  setDesc('');
+  setOpenModal(false);
+};
+
+
   useEffect(()=>{
     fetchDoctors()
   },[])
@@ -74,9 +93,28 @@ const fetchDoctors = () =>{
     })
   }
 
-  const handleEdit = () =>{
-
-  }
+  const handleEdit = () => {
+    const formData = new FormData();
+    formData.append('location', location);
+    formData.append('description', description);
+    formData.append('image',image);
+    
+  
+    axios.put(`http://localhost:3000/edit-doctor/${currentDoctorId}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+    .then(() => {
+      console.log('Doctor updated successfully');
+      // Fetch updated doctors list
+      fetchDoctors();
+      handleModalClose(); // Close modal after saving
+    })
+    .catch((error) => {
+      console.error('Error updating doctor', error);
+    });
+  };
  
   return (
     <div className='AddDoc-Container'>
@@ -164,7 +202,7 @@ const fetchDoctors = () =>{
                   {doc.name}
                 </Typography>
                 <div>
-                  <EditNote onClick={handleEdit}></EditNote>
+                  <EditNote onClick={()=>{handleModalOpen(doc)}}></EditNote>
                   <Delete onClick={()=>{handleDelete(doc.id)}}></Delete>
                 </div>
               </CardContent>
@@ -177,6 +215,40 @@ const fetchDoctors = () =>{
         )}
       </div>
 
+      <Modal open={openModal} onClose={handleModalClose}>
+        <ModalDialog variant="solid" color='white' sx={{width:'50%',textAlign:'center'}} >
+          <ModalClose onClick={handleModalClose} />
+            <h3 style={{color:'blue'}}>Edit Doctor Details...</h3>
+            <TextField
+              required
+              fullWidth
+              id="outlined-basic"
+              label="Location"
+              value={location}
+              variant="outlined"
+              onChange={e => setLocation(e.target.value)}
+              style={{marginBottom:'10px'}}
+            />
+            <TextField
+              required
+              fullWidth
+              id="outlined-basic"
+              label="Description"
+              value={description}
+              variant="outlined"
+              onChange={e => setDesc(e.target.value)}
+              style={{marginBottom:'10px'}}
+            />
+            <Input
+              required
+              fullWidth
+              type='file'
+              onChange={e => setImage(e.target.files[0])}
+              style={{marginBottom:'10px'}}
+            />
+            <Button variant='contained' color='success' onClick={handleEdit}>SAVE</Button>
+          </ModalDialog>
+      </Modal>
 
     </div>
   )

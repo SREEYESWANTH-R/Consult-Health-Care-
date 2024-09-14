@@ -417,6 +417,34 @@ app.delete("/delete-doctor/:DocId",(req,res)=>{
   })
 })
 
+//Route To edit doctors 
+app.put("/edit-doctor/:id", upload.single('image'), (req, res) => {
+  const doctorId = req.params.id;
+  const { location, description } = req.body;
+  const image = req.file ? req.file.filename : null;
+
+  // console.log("Request body:", req.body);
+  // console.log("Uploaded file:", req.file);
+  
+  if (!location || !description) {
+    return res.status(400).json({ error: "Location and description are required" });
+  }
+
+  const sqlQuery = `
+    UPDATE doctor
+    SET location = ?, description = ?, image = ? 
+    WHERE id = ?`;
+
+  db.query(sqlQuery, [location, description, image, doctorId], (err, result) => {
+    if (err) {
+      console.error("Database error:", err);
+      return res.status(500).json({ error: "Error updating doctor details" });
+    }
+    res.status(200).json({ message: "Doctor details updated successfully" });
+  });
+});
+
+
 //Route to get Drugs from the table
 app.get('/api/drugs',(req,res)=>{
   db.query("SELECT * FROM Drugs",(err,result)=>{

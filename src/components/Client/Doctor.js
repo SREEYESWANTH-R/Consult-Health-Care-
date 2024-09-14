@@ -89,7 +89,7 @@ function Doctor() {
               image={`http://localhost:3000/images/${doc.image}`}
               title={doc.name}
             />
-            <CardContent  sx={{ height: 160 }}>
+            <CardContent  sx={{ height: 200 }}>
               <Typography gutterBottom variant="h5" component="div">
                 {doc.name}
               </Typography>
