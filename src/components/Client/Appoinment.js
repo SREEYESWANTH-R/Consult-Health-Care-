@@ -4,9 +4,6 @@ import { Button, TextField, InputLabel,MenuItem,FormControl,Select } from '@mui/
 import LocalHospitalIcon from '@mui/icons-material/LocalHospital'; 
 import axios from "axios";
 
-
-
-
 function Appoinment(){
    
   const [name, setName] = useState("");

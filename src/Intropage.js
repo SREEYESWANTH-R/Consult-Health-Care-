@@ -36,12 +36,53 @@ function Intropage() {
           <img src={IntroSec} style={{width:'100%', height:'100%'}} alt="into-img"/>
         </div>
       </div>
-      <footer className='footer'>
-        <div></div>
-        <div className='contactUs'>
-          
+
+      <div class="services-section">
+        <h2>Our Services</h2>
+        <div class="service-card">
+          <h3>Consult with Doctors</h3>
+          <p>Access a wide range of specialists for online consultations and medical advice.</p>
         </div>
-      </footer>
+        <div class="service-card">
+          <h3>Book Appointments</h3>
+          <p>Schedule appointments with your preferred doctors quickly and easily.</p>
+        </div>
+        <div class="service-card">
+          <h3>Buy Tablets</h3>
+          <p>Order medicines from our pharmacy and get them delivered to your doorstep.</p>
+        </div>
+      </div>
+
+
+      <footer className='footer'>
+        <div className='footer-container'>
+          <div className='footer-about'>
+            <h4>About Us</h4>
+            <p>We provide secure and private consultations with specialist doctors online, ensuring you receive the care you need.</p>
+          </div>
+          <div className='footer-links'>
+            <h4>Quick Links</h4>
+            <ul>
+              <li><Link className='footer-link' to="/signup">SignUp</Link></li>
+              <li><Link className='footer-link' to="/login">Login</Link></li>
+              <li><Link className='footer-link' to="/adminlogin">Admin</Link></li>
+            </ul>
+          </div>
+          <div className='footer-contact'>
+            <h4>Contact Us</h4>
+            <p>Email: support@consult.com</p>
+            <p>Phone: +123 456 7890</p>
+            <div className='social-icons'>
+              <a href='#'><i className='fab fa-facebook'></i></a>
+              <a href='#'><i className='fab fa-instagram'></i></a>
+            </div>
+          </div>
+        </div>
+        <div className='footer-bottom'>
+          <p>&copy; 2024 Consult. All rights reserved.</p>
+        </div>
+    </footer>
+
     </div>
   );
 }
