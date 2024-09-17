@@ -170,6 +170,25 @@ app.post("/login", (req, res) => {
   });
 });
 
+//Route for admin analatics
+ app.get("/analytics",(req,res)=>{
+    const query =  `
+    SELECT 
+      (SELECT COUNT(*) FROM signup WHERE active = 1) AS ActiveCount,
+      (SELECT COUNT(*) FROM appointment) AS AppointmentCount,
+      (SELECT COUNT(*) FROM doctor) AS DoctorCount
+  `;
+    db.query(query,(err,result)=>{
+      if (err) {
+        console.error("Error fetching data:", err);
+        res.status(500).send("Error fetching analytics data");
+      } else {
+        
+        res.json(result[0]); // Sends the active count as JSON
+      }
+    });
+ });
+
 //Route for logout
 app.post('/logout',verifyToken,(req,res)=>{
     const userId  = req.userId; 
@@ -338,8 +357,7 @@ app.get("/admin/dashboard",(req,res)=>{
   db.query(query,(error,result)=>{
     if(error){
       console.error("Error fetching Details of Appoinment",error);
-      res.status(500).json({error:"Error fetching appoinment details"});
-      return;
+      res.status(500).json({error:"Error fetching appoinment details"});  
     }
     res.status(200).json(result);
 

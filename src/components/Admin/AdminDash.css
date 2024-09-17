@@ -121,3 +121,17 @@ html, body {
     margin: 5px 0;
   }
   
+  .Analytics{
+    display: flex;
+    justify-content: space-around;
+    padding: 1em 0;
+  }
+
+  .Analytcs-Cards{
+    border: 1px solid grey;
+    border-radius: 10px;
+    display: flex;
+    padding:0.5em;
+    width:auto;
+    background-color:#ddd;
+  }

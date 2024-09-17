@@ -5,8 +5,12 @@ import './AdminDash.css';
 import { Button } from '@mui/material';
 import { Link } from 'react-router-dom';
 
+
 function AdminDash() {
   const [appointments, setAppointments] = useState([]);
+  const [activeCount, setActiveCount] = useState(0);
+  const [appoinmentCount, setAppoinmentCount] = useState(0);
+  const [doctorCount, setDocotorCount] = useState(0);
 
   function getAppoinment() {
     axios.get('http://localhost:3000/admin/dashboard')
@@ -19,8 +23,22 @@ function AdminDash() {
       });
   }
 
+  function getActiveCount() {
+    axios.get('http://localhost:3000/analytics')
+      .then(response => {
+        setActiveCount(response.data.ActiveCount);
+        setAppoinmentCount(response.data.AppointmentCount);
+        setDocotorCount(response.data.DoctorCount)
+      })
+      .catch(error => {
+        console.error("Error fetching active count:", error);
+      });
+  }
+
+
   useEffect(() => {
     getAppoinment();
+    getActiveCount();
   }, []);
 
   function handleDelete(id) {
@@ -62,7 +80,20 @@ function AdminDash() {
           <Button variant="contained" style={{ backgroundColor: 'blue' }} type='submit'>Logout</Button>
         </div>
         <div className='app-main'>
-          Hello
+          <div className='Analytics'>
+            <div className='Analytcs-Cards'>
+              <p>Active Count</p>
+              <p>{activeCount}</p>
+            </div>
+            <div className='Analytcs-Cards'>
+              <p>Appoinment Count</p>
+              <p>{appoinmentCount}</p>
+            </div>
+            <div className='Analytcs-Cards'>
+              <p>Doctors Count</p>
+              <p>{doctorCount}</p>
+            </div>
+          </div>
         </div>
         <div className='appoint-card'>
           <h3>Appointment</h3>
