@@ -80,7 +80,6 @@ function AdminDash() {
         <div className='sideBar-admin'>
           <ul>
             <li className='side-items'><AccessibleForward style={{ color: 'blue' }} /><Link to='/admin/addDoctor' style={{textDecoration:'none'}}>Doctors</Link></li>
-            <li className='side-items'><MedicationLiquid style={{ color: 'blue' }} /><a href=''>Medicine</a></li>
             <li className='side-items'><AccountBalanceWallet style={{ color: 'blue' }} /><a href=''>Billing</a></li>
           </ul>
           <Button variant="contained" style={{ backgroundColor: 'blue' }} type='submit'>Logout</Button>
@@ -102,20 +101,18 @@ function AdminDash() {
             </div>
           </div>
           <div className='analytics-graph'>
-            <ReBarChart width={730} height={250} data={data}>
-              <CartesianGrid strokeDasharray="3 3" />
+            <ReBarChart width={730} height={350} data={data}>
+              <CartesianGrid strokeDasharray="0 0" />
               <XAxis dataKey="Analytics" />
               <YAxis />
               <Tooltip />
               <Legend />
-              <Bar dataKey="User" fill="#8884d8" />
-              <Bar dataKey="Appoinment" fill="#82ca9d" />
-              <Bar dataKey="Doctor" fill="#82ca9q" />
+              <Bar dataKey="User" fill="#0CAFFF" />
+              <Bar dataKey="Appoinment" fill="#0047AB" />
+              <Bar dataKey="Doctor" fill="#6699CC" />
             </ReBarChart>
           </div>
         </div>
-
-      
 
         <div className='appoint-card'>
           <h3>Appointment</h3>
