@@ -4,6 +4,8 @@ import { LocalHospital, AccountCircle, MedicationLiquid, AccountBalanceWallet, A
 import './AdminDash.css';
 import { Button } from '@mui/material';
 import { Link } from 'react-router-dom';
+import {BarChart as ReBarChart, Bar,XAxis, YAxis,CartesianGrid,Tooltip,Legend,} from 'recharts';
+
 
 
 function AdminDash() {
@@ -58,6 +60,10 @@ function AdminDash() {
     setAppointments(updatedAppointments);
   }
 
+  const data = [
+    { name: 'Analytics', User: activeCount, Appoinment: appoinmentCount, Doctor: doctorCount },
+  ];
+
   return (
     <div className='adminlog-cont'>
       <header className='admin-head'>
@@ -79,6 +85,7 @@ function AdminDash() {
           </ul>
           <Button variant="contained" style={{ backgroundColor: 'blue' }} type='submit'>Logout</Button>
         </div>
+
         <div className='app-main'>
           <div className='Analytics'>
             <div className='Analytcs-Cards'>
@@ -94,7 +101,22 @@ function AdminDash() {
               <p>{doctorCount}</p>
             </div>
           </div>
+          <div className='analytics-graph'>
+            <ReBarChart width={730} height={250} data={data}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="Analytics" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="User" fill="#8884d8" />
+              <Bar dataKey="Appoinment" fill="#82ca9d" />
+              <Bar dataKey="Doctor" fill="#82ca9q" />
+            </ReBarChart>
+          </div>
         </div>
+
+      
+
         <div className='appoint-card'>
           <h3>Appointment</h3>
           {appointments.map((appointment, index) => (
