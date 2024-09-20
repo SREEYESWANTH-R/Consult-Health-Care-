@@ -19,7 +19,7 @@ function AdminDash() {
       .then(response => {
         const updatedAppointments = response.data.map(appointment => ({ ...appointment, status: 'Active' }));
         setAppointments(updatedAppointments);
-      })
+      })  
       .catch(error => {
         console.error("Error fetching appointment details:", error);
       });
@@ -58,6 +58,16 @@ function AdminDash() {
     const updatedAppointments = [...appointments];
     updatedAppointments[index].status = 'Done';
     setAppointments(updatedAppointments);
+
+    axios.post('http://localhost:3000/appoinment/update',
+      {id:updatedAppointments[index].id,
+        active:0
+      }).then((response)=>{
+        console.log(response.data.message);
+      })
+      .catch((error) => {
+        console.error("Error updating appointment status:", error);
+      });
   }
 
   const data = [

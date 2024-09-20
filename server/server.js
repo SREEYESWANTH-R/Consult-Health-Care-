@@ -8,6 +8,7 @@ const jwt = require('jsonwebtoken');
 const nodeMailer = require('nodemailer');
 const dotenv = require('dotenv');
 const cookieParser = require("cookie-parser");
+const { request } = require("http");
 
 
 dotenv.config()
@@ -163,12 +164,12 @@ app.put('/change-password',(req,res)=>{
             }else{
               res.status(200).json({success:true,message:'Password Changed successfully'});
             }
-          })
+          });
         }
-      })
+      });
     }
-  })
-})
+  });
+});
 
 
 //Route for admin analatics
@@ -335,6 +336,17 @@ app.post('/notify-admin',(req,res)=>{
     return res.status(200).json({success:true,message:"Admin Notified"});
   })
 
+});
+
+
+ 
+//Route to update appoinment
+app.post('/appoinment/update',(req,res)=>{
+  const { id,active} = req.body;
+  db.query("UPDATE appointment SET active = ? WHERE id = ?",[active,id],(err,result)=>{
+    if(err) res.status(500).json({message:"update unsuccessfull"});
+    res.status(200).json({message:'Updated Successfully'});
+  });
 });
 
 //Route to delete appoinment - admin 

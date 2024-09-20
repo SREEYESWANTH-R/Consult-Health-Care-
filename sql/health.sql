@@ -36,7 +36,8 @@ CREATE TABLE appointment (
     gender CHAR(1) NOT NULL,
     mobNum VARCHAR(15) NOT NULL,
     address VARCHAR(255) NOT NULL,
-    date DATE NOT NULL
+    date DATE NOT NULL,
+    active TINYINT(1) DEFAULT 1
 );
 SELECT * FROM appointment;
 
