@@ -104,31 +104,6 @@ app.post("/signup",async(req,res)=>{
     )
 });
 
-//Router to change password
-app.put('/change-password',(req,res)=>{
-  const { oldPass,newPass,passChangeEmail} = req.body;
-  db.query("Select password from signup Where email= ?",[passChangeEmail],(err,result)=>{
-    if(err) res.status(400).json({message:"Wrong Email"});
-    if(result.length > 0){
-      const user = result[0];
-      bcrypt.compare(oldPass.toString(),user.password,(err)=>{
-        if(err){
-          res.status(400).json({success:false,message:'Wront Password'});
-        }else{
-          const newHashPAss = bcrypt.hash(newPass,10);
-          db.query("UPDATE signup SET password = ? WHERE email = ?",[newHashPAss,passChangeEmail],(err)=>{
-            if(err) {
-              res.status(400).json("Incorrect Credentials");
-            }else{
-              res.status(200).json({success:true,message:'PAssword Changed successfully'});
-            }
-          })
-        }
-
-      })
-    }
-  })
-})
 
 //Route for Login
 app.post("/login", (req, res) => {
@@ -142,19 +117,17 @@ app.post("/login", (req, res) => {
       if (result.length > 0){
           const user = result[0];
           //comparing password with the signin password
-          bcrypt.compare(password.toString(),user.password,(err,response)=>{
+          bcrypt.compare(password.toString(),user.password,(err)=>{
             if(err){
               return res.json({status:"Wrong Email or password"});
             } else{
               const accessToken =  jwt.sign({Id:user.id,name:user.name},process.env.MY_PRIVATE_KEY,{expiresIn:'1hr'});
-              
               
               res.cookie("accessToken",accessToken,{
                 httpOnly: true, // The cookie is inaccessible to JavaScript's `document.cookie`
                 secure: true,   // Set to true if you're using HTTPS
                 sameSite: 'Lax', // Prevents CSRF attacks
               });
-
               
               const updateSql = "UPDATE signup SET active = ? WHERE id = ?";
               //updating the column active in signup from false to true if password is correct 
@@ -169,6 +142,34 @@ app.post("/login", (req, res) => {
       }
   });
 });
+
+//Router to change password
+app.put('/change-password',(req,res)=>{
+  const { oldPass,newPass,passChangeEmail} = req.body;
+  db.query("Select password from signup Where email= ?",[passChangeEmail],(err,result)=>{
+    if(err) res.status(400).json({message:"Wrong Email"});
+    if(result.length > 0){
+      const user = result[0];
+      console.log(user);
+      bcrypt.compare(oldPass.toString(),user.password,async(err,result)=>{
+        if(err){
+          res.status(400).json({success:false,message:'Wrong Password'});
+        }else{
+          console.log(result);
+          const newHashPAss = await bcrypt.hash(newPass,10);
+          db.query("UPDATE signup SET password = ? WHERE email = ?",[newHashPAss,passChangeEmail],(err)=>{
+            if(err) {
+              res.status(400).json("Incorrect Credentials");
+            }else{
+              res.status(200).json({success:true,message:'Password Changed successfully'});
+            }
+          })
+        }
+      })
+    }
+  })
+})
+
 
 //Route for admin analatics
  app.get("/analytics",(req,res)=>{
