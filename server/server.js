@@ -1,17 +1,17 @@
 const express = require("express");
-const mysql = require("mysql2");
+// const mysql = require("mysql2");
 const bcrypt = require('bcrypt')
 const cors = require('cors');
 const multer = require('multer');
 const path = require('path')
 const jwt = require('jsonwebtoken');
 const nodeMailer = require('nodemailer');
-const dotenv = require('dotenv');
+// const dotenv = require('dotenv');
 const cookieParser = require("cookie-parser");
-const { request } = require("http");
+const db = require('./config/db')
 
 
-dotenv.config()
+// dotenv.config()
 
 //app
 const app = express();
@@ -75,14 +75,14 @@ const verifyToken = async (req,res,next)=>{
 
 
 //database connection 
-const db = mysql.createConnection(
-    {
-        host:process.env.HOST,
-        user:process.env.USER,
-        password:process.env.USER_PASS,
-        database:process.env.DATABASE
-    }
-)
+// const db = mysql.createConnection(
+//     {
+//         host:process.env.HOST,
+//         user:process.env.USER,
+//         password:process.env.USER_PASS,
+//         database:process.env.DATABASE
+//     }
+// )
 
 //Route for signup
 app.post("/signup",async(req,res)=>{

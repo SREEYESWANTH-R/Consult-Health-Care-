@@ -16,11 +16,11 @@ function Appoinment(){
   const [doctors, setDoctors] = useState([]);
   const [successMsg, setSuccessMsg] = useState("");
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [inactiveApp, setInactiveApp] = useState([]);
+  
 
   useEffect(() => {
     fetchDoctors();
-  }, [mobile]);
+  }, []);
 
   async function fetchDoctors() {
     try {
@@ -55,8 +55,6 @@ function Appoinment(){
     })
   }
 
-
-
   //preventing from choosing previous or earlier date
   const today = new Date().toISOString().split('T')[0];
 
@@ -70,7 +68,6 @@ function Appoinment(){
     }
     setDrawerOpen(open);
   };
-
 
   return (
     <div className='Apoint-cont'>
