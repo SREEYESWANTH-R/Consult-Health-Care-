@@ -17,7 +17,7 @@ const Profile = () => {
 
   const fetchProfile = async() =>{
     try{
-      const ProfileRes = await axios.get(`http://localhost:3000/profile/${id}`)
+      const ProfileRes = await axios.get(`/profiles/profile/${id}`)
       if(ProfileRes.status === 200){ 
         console.log(ProfileRes)
         setName(ProfileRes.data.result[0].name);
@@ -39,7 +39,7 @@ const Profile = () => {
   const updateProfile = async(e) => {
     e.preventDefault();
     try{
-      const uptRes = await axios.put(`http://localhost:3000/uptprofile/${id}`,{
+      const uptRes = await axios.put(`/profiles/uptprofile/${id}`,{
         Mobile:mobile,
         Address:address
       })
