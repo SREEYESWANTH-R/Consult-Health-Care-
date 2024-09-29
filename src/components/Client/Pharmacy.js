@@ -14,7 +14,7 @@ const Pharmacy = () => {
     
     const fetchDrugs = async() =>{
         try{
-            const response = await axios.get('http://localhost:3000/api/drugs');
+            const response = await axios.get('/drug/drugs');
             if(response.status === 200){
                 setDrugs(response.data);
             }
@@ -32,7 +32,7 @@ const Pharmacy = () => {
 
     const handleCart = async(drug)=>{
         try {
-            const response = await axios.put('http://localhost:3000/add/cart', {
+            const response = await axios.put('/drug/add/cart', {
                 drug_id: drug.drug_id,
                 cost: drug.cost,
                 quantity: 1
@@ -58,7 +58,7 @@ const Pharmacy = () => {
 
     const fetchCart = async()=>{
         try{
-            const getCart = await axios.get("http://localhost:3000/cart-details");
+            const getCart = await axios.get("/drug/cart-details");
             if(getCart){
                 console.log(getCart)
                 setCart(getCart.data.cartRes);

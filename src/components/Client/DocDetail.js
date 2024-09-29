@@ -11,7 +11,7 @@ function DocDetail() {
 
   const fetchDocDetails = async()=>{
     try{
-      const response  = await axios.get(`http://localhost:3000/dashboard/docdetails/${id}`);
+      const response  = await axios.get(`/doctor/dashboard/docdetails/${id}`);
       setDoctor(response.data.result[0]);
     }catch(error){
       console.error("Error displaying the details of the Doctor's",error);

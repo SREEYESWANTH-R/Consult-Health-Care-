@@ -15,7 +15,7 @@ function Doctor() {
   
   async function getDoctors(){
     try{
-      const response = await axios.get("http://localhost:3000/dashboard/doctors")
+      const response = await axios.get("/doctor/dashboard/doctors")
         setDoctor(response.data)
         console.log(response);
         

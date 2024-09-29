@@ -23,7 +23,7 @@ function Signup(){
             Password:password
         }
         try{
-            const response = await axios.post("http://localhost:3000/signup",userData);
+            const response = await axios.post("/auth/signup",userData);
             if(response.status === 200){
                 setMessage("Account Created Successfully");
                 setTimeout(()=>{

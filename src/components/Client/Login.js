@@ -24,7 +24,7 @@ function Login() {
     event.preventDefault();
     try{
       if(email != null && password.trim() != null){
-        const response = await axios.post("http://localhost:3000/login", {
+        const response = await axios.post("/auth/login", {
           Email: email,
           password: password
         })
@@ -53,7 +53,7 @@ function Login() {
   };
 
   const handlePassChange = ()=>{
-    axios.put('http://localhost:3000/change-password',{
+    axios.put('/auth/change-password',{
       passChangeEmail,
       oldPass,
       newPass

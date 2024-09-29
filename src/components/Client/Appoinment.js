@@ -24,7 +24,7 @@ function Appoinment(){
 
   async function fetchDoctors() {
     try {
-      const response = await axios.get("http://localhost:3000/dashboard/doctors");
+      const response = await axios.get("/doctor/dashboard/doctors");
       setDoctors(response.data);
     } catch (error) {
       console.error("Error fetching doctors data", error);
@@ -33,11 +33,11 @@ function Appoinment(){
 
   async function handleAppoinment(event){
     event.preventDefault();
-    axios.post("http://localhost:3000/appoinment",{
+    axios.post("/appoinments/appoinment",{
       name,age,gender,mobile,address,chooseDoc,date
     }).then((response)=>{
       setSuccessMsg(response.data.message);
-      axios.post('http://localhost:3000/notify-admin',{
+      axios.post('/email/notify-admin',{
         name,age,mobile,address,chooseDoc,date
       }).then((adminresponse)=>{
           console.log("Admin-Notified",adminresponse.data);

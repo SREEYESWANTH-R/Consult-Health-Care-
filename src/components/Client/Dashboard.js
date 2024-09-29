@@ -24,7 +24,7 @@ function Dashboard(){
   
  async function fetchUserName(){
     try{
-      const response = await axios.get('http://localhost:3000/userData');
+      const response = await axios.get('/dashboard/userData');
       if(response.status === 200){
         console.log(response);
         setUsername(response.data.username);
@@ -42,7 +42,7 @@ function Dashboard(){
 
   async function handleLogout() {
     try{
-      const response = await axios.post('http://localhost:3000/logout');
+      const response = await axios.post('/auth/logout');
       if(response.status === 200){
         navigate('/');
       }else{
