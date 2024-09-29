@@ -59,3 +59,41 @@ exports.adminLogin = (req,res)=>{
     );
   };
   
+  exports.logout = (req,res)=>{
+    const userId  = req.userId; 
+    //query to update the active status of user to false
+    const updateQuery = "UPDATE signup SET active = ? WHERE id = ?";
+    db.query(updateQuery,[false,userId],(err,uptResult)=>{
+      if(err) return res.status(500).json({Error:'Error updating the active status'});
+
+      res.clearCookie("accessToken");
+      res.status(200).json({success:true,message:'Logout Successful'});
+      
+    });
+  };
+
+  exports.passChange = (req,res)=>{
+    const { oldPass,newPass,passChangeEmail} = req.body;
+    db.query("Select password from signup Where email= ?",[passChangeEmail],(err,result)=>{
+      if(err) res.status(400).json({message:"Wrong Email"});
+      if(result.length > 0){
+        const user = result[0];
+        console.log(user);
+        bcrypt.compare(oldPass.toString(),user.password,async(err,result)=>{
+          if(err){
+            res.status(400).json({success:false,message:'Wrong Password'});
+          }else{
+            console.log(result);
+            const newHashPAss = await bcrypt.hash(newPass,10);
+            db.query("UPDATE signup SET password = ? WHERE email = ?",[newHashPAss,passChangeEmail],(err)=>{
+              if(err) {
+                res.status(400).json("Incorrect Credentials");
+              }else{
+                res.status(200).json({success:true,message:'Password Changed successfully'});
+              }
+            });
+          }
+        });
+      }
+    });
+  };
