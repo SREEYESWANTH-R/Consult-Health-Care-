@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { LocalHospital, AccountCircle, MedicationLiquid, AccountBalanceWallet, AccessibleForward, Close } from '@mui/icons-material';
+import { LocalHospital, AccountCircle, AccountBalanceWallet, AccessibleForward, Close } from '@mui/icons-material';
 import './AdminDash.css';
 import { Button } from '@mui/material';
 import { Link } from 'react-router-dom';
@@ -15,7 +15,7 @@ function AdminDash() {
   const [doctorCount, setDocotorCount] = useState(0);
 
   function getAppoinment() {
-    axios.get('http://localhost:3000/admin/dashboard')
+    axios.get('/dashboard/admin/dash')
       .then(response => {
         const updatedAppointments = response.data.map(appointment => ({ ...appointment, status: 'Active' }));
         setAppointments(updatedAppointments);
@@ -26,7 +26,7 @@ function AdminDash() {
   }
 
   function getActiveCount() {
-    axios.get('http://localhost:3000/analytics')
+    axios.get('/dashboard/analytics')
       .then(response => {
         setActiveCount(response.data.ActiveCount);
         setAppoinmentCount(response.data.AppointmentCount);
@@ -44,7 +44,7 @@ function AdminDash() {
   }, []);
 
   function handleDelete(id) {
-    axios.post('http://localhost:3000/admin/appointment/delete', { id })
+    axios.post('/appoinments/admin/appointment/delete', { id })
       .then(response => {
         console.log(response.data.message);
         getAppoinment(); // Refresh the appointment list after deletion
@@ -59,7 +59,7 @@ function AdminDash() {
     updatedAppointments[index].status = 'Done';
     setAppointments(updatedAppointments);
 
-    axios.post('http://localhost:3000/appoinment/update',
+    axios.post('/appoinments/appoinment/update',
       {id:updatedAppointments[index].id,
         active:0
       }).then((response)=>{

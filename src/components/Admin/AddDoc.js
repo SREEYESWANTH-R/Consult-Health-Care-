@@ -34,7 +34,7 @@ const handleClose = ()=>{
         formData.append('expertise', expertise);
         formData.append('image', image);
 
-        axios.post("http://localhost:3000/addDoctor", formData, {
+        axios.post("/doctor/addDoctor", formData, {
         headers: {
                 'Content-Type': 'multipart/form-data',
         },
@@ -55,7 +55,7 @@ const handleClose = ()=>{
 }
 
 const fetchDoctors = () =>{
-  axios.get("http://localhost:3000/dashboard/doctors")
+  axios.get("/doctor/dashboard/doctors")
   .then((response)=>{
     setDoc(response.data);
   }).catch((error)=>{
@@ -85,7 +85,7 @@ const handleModalClose = () => {
   },[])
 
   const handleDelete = (DocId) =>{
-    axios.delete(`http://localhost:3000/delete-doctor/${DocId}`)
+    axios.delete(`/doctor/delete-doctor/${DocId}`)
     .then(()=>{
       alert("doctor deleted")
     }).catch((error)=>{
@@ -100,7 +100,7 @@ const handleModalClose = () => {
     formData.append('image',image);
     
   
-    axios.put(`http://localhost:3000/edit-doctor/${currentDoctorId}`, formData, {
+    axios.put(`/doctor/edit-doctor/${currentDoctorId}`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },

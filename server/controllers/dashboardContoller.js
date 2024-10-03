@@ -28,7 +28,7 @@ exports.adminDashboard = (req,res)=>{
       (err,results) =>{
         if(err){
           console.error("Error fetching username",err);
-          res.status(500).send("Internal Serverr Error");
+          res.status(500).send("Internal Server Error");
         }
         if(results.length === 1){
           const adName = results[0].adminname;

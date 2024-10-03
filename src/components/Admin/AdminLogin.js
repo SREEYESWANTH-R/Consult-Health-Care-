@@ -15,7 +15,7 @@ function AdminLogin(){
   function handleAdlogin(event){
     event.preventDefault();
 
-    Axios.post('http://localhost:3000/adminlogin',
+    Axios.post('/auth/adminlogin',
     {adminName,adPassword})
     .then(response=>{
       if(response.data.success){
