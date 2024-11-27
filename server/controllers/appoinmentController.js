@@ -37,3 +37,7 @@ exports.adminAppDelete = (req, res) => {
       res.status(200).json({ message: 'Appointment deleted successfully' });
     });
   };
+
+exports.clientPendingAppoint = (req,res) => {
+  const q = ""
+}

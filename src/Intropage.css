@@ -71,9 +71,9 @@
 }
 
 .footer {
-    background-color: #000000;
+    background-color: #9ccfffc4;
     padding: 40px 20px;
-    color: #ffffff;
+    color: #000000;
   }
   
   .footer-container {
@@ -108,7 +108,7 @@
   
   .footer-link {
     text-decoration: none;
-    color: #ffffff;
+    color: #000000;
   }
   
   .footer-link:hover {
@@ -130,7 +130,7 @@
     text-align: center;
     margin-top: 20px;
     font-size: 14px;
-    color: #929292;
+    color: #000000;
   }
   
   .services-section {

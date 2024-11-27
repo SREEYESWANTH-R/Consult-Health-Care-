@@ -68,6 +68,14 @@ const Pharmacy = () => {
         }
     }
 
+    const handleDecrement = (itemId) => {
+        setCart(cart.map(item => 
+            item.precption_id  === itemId && item.quantity > 1 
+            ? {...item,quantity: item.quantity - 1 ,cost: item.cost - (item.cost / item.quantity)}
+            : item
+        ))
+    }
+
     useEffect(()=>{
         fetchDrugs();
     },[])
@@ -158,7 +166,11 @@ const Pharmacy = () => {
                                 <Typography color={'black'}>
                                     ₹{item.cost}
                                 </Typography>
-                                <hr />
+                                <button style={{border:'1px solid black',borderRadius:'10px', padding:'1px 10px',cursor:'pointer'}}
+                                    onClick={() => handleDecrement(item.precption_id)}
+                                >
+                                -
+                                </button>
                             </div>
                         ))
                    ):(

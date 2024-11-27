@@ -31,6 +31,10 @@ function Appoinment(){
     }
   }
 
+  const fetchCompletedAppoint = () =>{
+    axios.get("/appoinments/completedAppoint",{name})
+  }
+
   async function handleAppoinment(event){
     event.preventDefault();
     axios.post("/appoinments/appoinment",{

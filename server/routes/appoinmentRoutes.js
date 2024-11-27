@@ -6,6 +6,7 @@ const router = express.Router();
 router.post('/appoinment',appoinmentController.appoinment);
 router.post('/appoinment/update',appoinmentController.appoinmentUpdate);
 router.post('/admin/appointment/delete',appoinmentController.adminAppDelete);
+router.get('/completedAppoint',appoinmentController.clientPendingAppoint);
 
 
 module.exports = router;
